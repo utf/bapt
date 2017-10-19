@@ -16,7 +16,7 @@ default_fonts = ['Whitney Book Extended', 'Arial', 'Whitney Book', 'Helvetica',
 _ticklabelsize = 18
 _labelsize = 18
 _ticksize = 6
-_linewidth = 1.3
+_linewidth = 1.
 
 
 def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
@@ -69,8 +69,8 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     return plt
 
 
-def gbar(ax, left, top, bar_width=2, bottom=0, gradient=vb_cmap, show_edge=True,
-         fade=False):
+def gbar(ax, left, top, bar_width=3, bottom=0, gradient=vb_cmap,
+         show_edge=True, edge_colour='k', edge_zorder=5):
     X = [[.6, .6], [.7, .7]]
     right = left + bar_width
     ax.imshow(X, interpolation='bicubic', cmap=gradient,
@@ -78,18 +78,31 @@ def gbar(ax, left, top, bar_width=2, bottom=0, gradient=vb_cmap, show_edge=True,
 
     if show_edge:
         border = Rectangle((left, top), bar_width, bottom-top, fill=False,
-                           lw=_linewidth, edgecolor='k')
+                           lw=_linewidth, edgecolor=edge_colour, clip_on=False,
+                           zorder=edge_zorder)
         ax.add_patch(border)
 
 
-def dashed_arrow(ax, x, y, dx, dy, colour='k', line_width=_linewidth):
+def fadebar(ax, left, top, bar_width=3, bottom=0):
+    fade = Rectangle((left, top), bar_width, bottom-top, alpha=0.5, color='w',
+                     clip_on=False, zorder=3)
+    ax.add_patch(fade)
+
+
+def dashed_arrow(ax, x, y, dx, dy, colour='k', line_width=_linewidth,
+                 start_head=True, end_head=True):
     length = 0.25
     width = 0.2
     ax.plot([x, x + dx], [y, y + dy], c=colour, ls='--', lw=line_width,
             dashes=(8, 4.3))
-    ax.arrow(x + dx, y + dy - length, 0, length, head_width=width,
-             head_length=length, fc=colour, ec=colour, overhang=0.15,
-             length_includes_head=True, lw=line_width)
+    if start_head:
+        ax.arrow(x, y + length, 0, -length, head_width=width,
+                 head_length=length, fc=colour, ec=colour, overhang=0.15,
+                 length_includes_head=True, lw=line_width)
+    if end_head:
+        ax.arrow(x + dx, y + dy - length, 0, length, head_width=width,
+                 head_length=length, fc=colour, ec=colour, overhang=0.15,
+                 length_includes_head=True, lw=line_width)
 
 
 def read_config(filename):

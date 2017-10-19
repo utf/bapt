@@ -3,24 +3,18 @@ compounds:
       ea: 4.4
       ip: 7.7
       fade: True
-      gradient: 0
     - name: 'MOF-5'
       ea: 2.7
       ip: 7.3
-      gradient: 0, 1
+      fade: True
     - name: 'HKUST-1'
       ea: 5.1
       ip: 6.0
-      gradient: 1, 0
     - name: 'ZIF-8'
       ea: 1.9
       ip: 6.4
-      gradient: 0
+      fade: True
     - name: 'COF-1M'
       ea: 1.3
       ip: 4.7
-      color: 'red'
-
-#gradients:
-#    - id: 0
-#      start: 
+      fade: True

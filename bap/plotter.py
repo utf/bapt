@@ -2,7 +2,8 @@
 # Copyright (c) Alex Ganose
 # Distributed under the terms of the MIT License.
 
-from bap import pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow
+from bap import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow, _linewidth,
+                 fadebar)
 
 from matplotlib.ticker import MaxNLocator
 
@@ -25,7 +26,7 @@ class BandAlignmentPlotter(object):
 
     def get_plot(self, height=5, width=None, emin=None, colours=None,
                  bar_width=3, show_axis=False, label_size=15, plt=None,
-                 fonts=None):
+                 fonts=None, show_ea=False, name_colour='w'):
 
         width = bar_width/2. * len(self.data) if not width else width
         emin = self.emin if not emin else emin
@@ -38,18 +39,38 @@ class BandAlignmentPlotter(object):
             x = i * bar_width
             ip = -compound['ip']
             ea = -compound['ea']
+            fade = 'fade' in compound and compound['fade']
+            ec = '#808080' if fade else 'k'
+            ez = 4 if fade else 5
 
             gbar(ax, x, ip, bottom=emin, bar_width=bar_width, show_edge=True,
-                 gradient=vb_cmap)
+                 gradient=vb_cmap, edge_colour=ec, edge_zorder=ez)
             gbar(ax, x, ea, bar_width=bar_width, show_edge=True,
-                 gradient=cb_cmap)
-            dashed_arrow(ax, x + bar_width/6., ip, 0, -ip + pad/5, colour='k',
-                         line_width=1.3)
+                 gradient=cb_cmap, edge_colour=ec, edge_zorder=ez)
+            if show_ea:
+                dashed_arrow(ax, x + bar_width/6., ea - pad/3, 0,
+                             -ea + 2 * pad/3, colour='k', line_width=_linewidth)
+                dashed_arrow(ax, x + bar_width/6., ip - pad/3, 0,
+                             ea-ip + 2 * pad/3, colour='k', end_head=False,
+                             line_width=_linewidth)
+                ax.text(x + bar_width/4., ip - pad/2,
+                        '{:.1f} eV'.format(compound['ip']), ha='left',
+                        va='bottom', size=label_size, color='k', zorder=2)
+                ax.text(x + bar_width/4., pad * 2,
+                        '{:.1f} eV'.format(compound['ea']), ha='left', va='top',
+                        size=label_size, color='k', zorder=2)
+            else:
+                dashed_arrow(ax, x + bar_width/6., ip - pad/3, 0,
+                             -ip + 2 * pad/3, colour='k', line_width=_linewidth)
+                ax.text(x + bar_width/4., pad * 2,
+                        '{:.1f} eV'.format(compound['ip']), ha='left', va='top',
+                        size=label_size, color='k', zorder=2)
 
-            ax.text(x + bar_width/2., ip + pad, compound['name'], ha='center',
-                    va='top', size=label_size, color='w')
-            ax.text(x + bar_width/4., pad * 2, '{:.1f} eV'.format(compound['ip']),
-                    ha='left', va='top', size=label_size+1, color='k')
+            ax.text(x + bar_width/2., ip + pad, compound['name'], zorder=2,
+                    ha='center', va='top', size=label_size, color=name_colour)
+
+            if fade:
+                fadebar(ax, x, emin, bottom=0)
 
         ax.set_ylim((emin, 0))
         ax.set_xlim((0, len(self.data) * bar_width))
@@ -64,6 +85,4 @@ class BandAlignmentPlotter(object):
 
         ax.set_title('Vacuum Level', size=18)
         ax.set_xlabel('Valence Band', size=18)
-        #ax.text(0.5, 0, 'Valence Band', ha='center', transform=ax.transAxes,
-        #        va='top', size=18)
         return plt

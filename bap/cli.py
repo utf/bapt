@@ -15,10 +15,10 @@ __email__ = "alexganose@googlemail.com"
 __date__ = "Oct 19, 2017"
 
 
-def bap(band_edge_data, output='alignment.pdf'):
+def bap(band_edge_data, output='alignment.pdf', show_ea=False, dpi=400):
     baper = BandAlignmentPlotter(band_edge_data)
-    plt = baper.get_plot()
-    plt.savefig(output)
+    plt = baper.get_plot(show_ea=show_ea)
+    plt.savefig(output, dpi=400)
 
 
 def main():
@@ -39,6 +39,10 @@ def main():
                         help='List of electron affinities (comma separated).')
     parser.add_argument('-o', '--output', default='alignment.pdf',
                         help='Output file name (defaults to alignment.pdf).')
+    parser.add_argument('--show-ea', action='store_true', dest='show_ea',
+                        help='Display the electron affinity value.')
+    parser.add_argument('--dpi', default=400,
+                        help='Dots-per-inch for file output.')
     args = parser.parse_args()
 
     emsg = None
@@ -58,7 +62,7 @@ def main():
     else:
         data = [{'name': name, 'ip': ip, 'ea': ea} for name, ip, ea in
                 zip(args.name, args.ip, args.ea)]
-    bap(data, output=args.output)
+    bap(data, output=args.output, show_ea=args.show_ea, dpi=args.dpi)
 
 if __name__ == "__main__":
     main()

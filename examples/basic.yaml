@@ -4,7 +4,7 @@ compounds:
       ip: 7.7
     - name: 'MOF-5'
       ea: 2.7
-      ip: 7.3
+      ip: 9
     - name: 'HKUST-1'
       ea: 5.1
       ip: 6.0
