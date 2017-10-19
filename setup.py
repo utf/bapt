@@ -31,11 +31,5 @@ Get yourself some nice band alignment diagrams
     keywords='chemistry dft band alignment ionisation potential electron',
     packages=find_packages(),
     install_requires=['numpy', 'matplotlib'],
-    #entry_points={'console_scripts': [
-    #                  'vaspy-bandgen = ba.cli.bandgen:main',
-    #                  'vaspy-bandplot = vaspy.cli.bandplot:main',
-    #                  'vaspy-bandstats = vaspy.cli.bandstats:main',
-    #                  'vaspy-dosplot = vaspy.cli.dosplot:main',
-    #                  'vaspy-kgen = vaspy.cli.kgen:main',
-    #                  'vaspy-optics = vaspy.cli.optics:main']}
-    )
+    entry_points={'console_scripts': ['bap = bap.cli:main']}
+)
