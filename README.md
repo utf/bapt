@@ -25,31 +25,26 @@ A basic usage of the command-line interface:
 
 produces a plot that is ready to go into any publication:
 
-<img src="https://raw.githubusercontent.com/utf/bap/master/examples/command-line.png" height="300">
+<img src="https://raw.githubusercontent.com/utf/bap/master/examples/command-line.png" height="350">
 
 A more advanced plot, generated using the `examples/gradients.yaml` config
 file, allows for additional effects:
 
     bap --filename examples/gradients.yaml
 
-producing the graphic below:
-
-<img src="https://raw.githubusercontent.com/utf/bap/master/examples/gradients.png" height="300">
+<img src="https://raw.githubusercontent.com/utf/bap/master/examples/gradients.png" height="350">
 
 
 Requirements
 ------------
-Galore is currently compatible with Python 2.7 and Python 3.4. It is
-*strongly* recommended that you install Galore with Python 3, as many
-scientific Python libraries are committed to dropping Python 2 support
-`by the end of 2020 <http://www.python3statement.org>`__.
 
-Matplotlib is required for plotting and PyYAML is needed for config files.
+Bap is currently compatible with Python 2.7 and Python 3.4. Matplotlib is required 
+for plotting and PyYAML is needed for config files.
 
-Galore uses Pip and setuptools for installation. You *probably* already
+Bap uses Pip and setuptools for installation. You *probably* already
 have this; if not, your GNU/Linux package manager will be able to oblige
 with a package named something like ``python-setuptools``. On Max OSX
-the Python distributed with `Homebrew <http://brew.sh>`__ includes
+the Python distributed with [Homebrew](<http://brew.sh>) includes
 setuptools and Pip.
 
 
