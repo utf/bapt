@@ -59,7 +59,8 @@ def main():
                     map(float, args.ea.split(',')))]
         settings = {}
 
-    settings.update({'show_ea': args.show_ea})
+    properties = vars(args)
+    properties.update(settings)
 
     baper = BandAlignmentPlotter(data)
     plt = baper.get_plot(**settings)
