@@ -5,8 +5,7 @@
 import os
 import argparse
 
-from bapt import read_config
-from bapt.plotter import BandAlignmentPlotter
+from bapt import read_config, get_plot
 
 __author__ = "Alex Ganose"
 __version__ = "0.1"
@@ -35,6 +34,23 @@ def main():
                         help='Output file name (defaults to alignment.pdf).')
     parser.add_argument('--show-ea', action='store_true', dest='show_ea',
                         help='Display the electron affinity value.')
+    parser.add_argument('--show-axis', action='store_true', dest='show_axis',
+                        help='Display the energy yaxis bar and label.')
+    parser.add_argument('--height', type=float, default=5,
+                        help='Set figure height in inches.')
+    parser.add_argument('--width', type=float, default=None,
+                        help='Set figure width in inches.')
+    parser.add_argument('--emin', type=float, default=None,
+                        help='Set energy minium on y axis.')
+    parser.add_argument('--bar-width', type=float, dest='bar_width', default=3,
+                        help='Set the width per bar for each compound.')
+    parser.add_argument('--font-size', type=float, dest='label_size',
+                        default=15,
+                        help='Set the width per bar for each compound.')
+    parser.add_argument('--name-colour', dest='name_colour', default='w',
+                        help='Set the colour for the compound name.')
+    parser.add_argument('--fade-cb', action='store_true', dest='fade_cb',
+                        help='Apply a fade to the conduction band segments.')
     parser.add_argument('--dpi', default=400,
                         help='Dots-per-inch for file output.')
     args = parser.parse_args()
@@ -51,6 +67,8 @@ def main():
         print(emsg)
         os.exit()
 
+    output_file = args.output
+
     if args.filename:
         data, settings = read_config(args.filename)
     else:
@@ -60,11 +78,13 @@ def main():
         settings = {}
 
     properties = vars(args)
+    remove_keys = ('filename', 'ip', 'ea', 'name', 'output', 'dpi')
+    for key in remove_keys:
+        properties.pop(key, None)
     properties.update(settings)
 
-    bapter = BandAlignmentPlotter(data)
-    plt = bapter.get_plot(**settings)
-    plt.savefig(args.output, dpi=400)
+    plt = get_plot(data, **properties)
+    plt.savefig(output_file, dpi=400)
 
 
 if __name__ == "__main__":
