@@ -25,14 +25,14 @@ A basic usage of the command-line interface:
 
 produces a plot that is ready to go into any publication:
 
-<img src="https://raw.githubusercontent.com/utf/bap/master/examples/command-line.png" height="400">
+<img src="https://raw.githubusercontent.com/utf/bap/master/examples/command-line.png" height="350">
 
 A more advanced plot, generated using the `examples/gradients.yaml` config
 file, allows for additional effects:
 
     bap --filename examples/gradients.yaml
 
-<img src="https://raw.githubusercontent.com/utf/bap/master/examples/gradients.png" height="400">
+<img src="https://raw.githubusercontent.com/utf/bap/master/examples/gradients.png" height="350">
 
 
 Requirements
