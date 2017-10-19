@@ -8,9 +8,9 @@ from setuptools import setup, find_packages
 project_dir = abspath(dirname(__file__))
 
 setup(
-    name='bap',
+    name='bapt',
     version='1.0.0',
-    description='Band alignment plotting tools',
+    description='Band alignment plotting tool',
     long_description="""
 Get yourself some nice band alignment diagrams
 """,
@@ -35,5 +35,5 @@ Get yourself some nice band alignment diagrams
     keywords='chemistry dft band alignment ionisation potential electron',
     packages=find_packages(),
     install_requires=['numpy', 'matplotlib'],
-    entry_points={'console_scripts': ['bap = bap.cli:main']}
+    entry_points={'console_scripts': ['bapt = bapt.cli:main']}
 )

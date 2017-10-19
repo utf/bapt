@@ -5,8 +5,8 @@
 import os
 import argparse
 
-from bap import read_config
-from bap.plotter import BandAlignmentPlotter
+from bapt import read_config
+from bapt.plotter import BandAlignmentPlotter
 
 __author__ = "Alex Ganose"
 __version__ = "0.1"
@@ -62,8 +62,8 @@ def main():
     properties = vars(args)
     properties.update(settings)
 
-    baper = BandAlignmentPlotter(data)
-    plt = baper.get_plot(**settings)
+    bapter = BandAlignmentPlotter(data)
+    plt = bapter.get_plot(**settings)
     plt.savefig(args.output, dpi=400)
 
 
