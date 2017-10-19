@@ -85,7 +85,20 @@ def gbar(ax, left, top, bar_width=2, bottom=0, gradient=vb_cmap, show_edge=True,
 def dashed_arrow(ax, x, y, dx, dy, colour='k', line_width=_linewidth):
     length = 0.25
     width = 0.2
-    ax.plot([x, x+dx],[y, y+dy], c=colour, ls='--', lw=line_width, dashes=(8,4.3))
+    ax.plot([x, x + dx], [y, y + dy], c=colour, ls='--', lw=line_width,
+            dashes=(8, 4.3))
     ax.arrow(x + dx, y + dy - length, 0, length, head_width=width,
              head_length=length, fc=colour, ec=colour, overhang=0.15,
              length_includes_head=True, lw=line_width)
+
+
+def read_config(filename):
+    try:
+        import ruamel.yaml as yaml
+    except ImportError:
+        import yaml
+
+    with open(filename, 'r') as f:
+        config = yaml.load(f)
+    band_edge_data = config['compounds']
+    return band_edge_data
