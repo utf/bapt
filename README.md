@@ -1,2 +1,5 @@
-# bap
-Band alignment plotting tool
+# README
+
+## Introduction
+
+Bap is a tool for generating beautiful band alignment plot.
