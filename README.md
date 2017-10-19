@@ -44,7 +44,7 @@ for plotting and PyYAML is needed for config files.
 Bap uses Pip and setuptools for installation. You *probably* already
 have this; if not, your GNU/Linux package manager will be able to oblige
 with a package named something like ``python-setuptools``. On Max OSX
-the Python distributed with `Homebrew <http://brew.sh>`__ includes
+the Python distributed with [Homebrew](<http://brew.sh>) includes
 setuptools and Pip.
 
 
