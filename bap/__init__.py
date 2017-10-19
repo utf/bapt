@@ -2,6 +2,14 @@
 # Copyright (c) Alex Ganose
 # Distributed under the terms of the MIT License.
 
+from matplotlib.patches import Rectangle
+from matplotlib.colors import LinearSegmentedColormap
+
+
+cb_colours = [(247/255., 148/255., 51/255.), (251/255., 216/255., 181/255.)]
+vb_colours = [(23/255., 71/255., 158/255.), (174/255., 198/255., 242/255.)]
+cb_cmap = LinearSegmentedColormap.from_list('cb', cb_colours, N=200)
+vb_cmap = LinearSegmentedColormap.from_list('vb', vb_colours, N=200)
 
 default_fonts = ['Whitney Book Extended', 'Arial', 'Whitney Book', 'Helvetica',
                  'Liberation Sans', 'Andale Sans']
@@ -61,16 +69,23 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     return plt
 
 
-def gbar(ax, left, top, bar_width=2, bottom=0, gradient=None, show_edge=True):
-    from matplotlib.pyplot import cm
-    from matplotlib.patches import Rectangle
-
+def gbar(ax, left, top, bar_width=2, bottom=0, gradient=vb_cmap, show_edge=True,
+         fade=False):
     X = [[.6, .6], [.7, .7]]
     right = left + bar_width
-    ax.imshow(X, interpolation='bicubic', cmap='Blues_r',
+    ax.imshow(X, interpolation='bicubic', cmap=gradient,
               extent=(left, right, bottom, top), alpha=1)
 
     if show_edge:
         border = Rectangle((left, top), bar_width, bottom-top, fill=False,
-                        lw=_linewidth, edgecolor='k')
+                           lw=_linewidth, edgecolor='k')
         ax.add_patch(border)
+
+
+def dashed_arrow(ax, x, y, dx, dy, colour='k', line_width=_linewidth):
+    length = 0.25
+    width = 0.2
+    ax.plot([x, x+dx],[y, y+dy], c=colour, ls='--', lw=line_width, dashes=(8,4.3))
+    ax.arrow(x + dx, y + dy - length, 0, length, head_width=width,
+             head_length=length, fc=colour, ec=colour, overhang=0.15,
+             length_includes_head=True, lw=line_width)
