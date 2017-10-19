@@ -83,9 +83,9 @@ def gbar(ax, left, top, bar_width=3, bottom=0, gradient=vb_cmap,
         ax.add_patch(border)
 
 
-def fadebar(ax, left, top, bar_width=3, bottom=0):
+def fadebar(ax, left, top, bar_width=3, bottom=0, zorder=3):
     fade = Rectangle((left, top), bar_width, bottom-top, alpha=0.5, color='w',
-                     clip_on=False, zorder=3)
+                     clip_on=False, zorder=zorder)
     ax.add_patch(fade)
 
 
@@ -113,5 +113,25 @@ def read_config(filename):
 
     with open(filename, 'r') as f:
         config = yaml.load(f)
+
+
+    settings = config['settings']
+    gradient_data = config['gradients']
+    gradients = {}
+    for d in gradient_data:
+        g = LinearSegmentedColormap.from_list(d['id'], [d['start'], d['end']],
+                                              N=200)
+        gradients[d['id']] = g
+
     band_edge_data = config['compounds']
-    return band_edge_data
+    for compound in band_edge_data:
+        if 'gradient' in compound:
+            ids = map(int, compound['gradient'].split(','))
+            compound.pop('gradient', None)
+            if len(ids) == 1:
+                compound['vb_gradient'] = gradients[ids[0]]
+                compound['cb_gradient'] = gradients[ids[0]]
+            else:
+                compound['vb_gradient'] = gradients[ids[0]]
+                compound['cb_gradient'] = gradients[ids[1]]
+    return band_edge_data, settings

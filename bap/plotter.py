@@ -26,7 +26,7 @@ class BandAlignmentPlotter(object):
 
     def get_plot(self, height=5, width=None, emin=None, colours=None,
                  bar_width=3, show_axis=False, label_size=15, plt=None,
-                 fonts=None, show_ea=False, name_colour='w'):
+                 fonts=None, show_ea=False, name_colour='w', fade_cb=False):
 
         width = bar_width/2. * len(self.data) if not width else width
         emin = self.emin if not emin else emin
@@ -39,14 +39,22 @@ class BandAlignmentPlotter(object):
             x = i * bar_width
             ip = -compound['ip']
             ea = -compound['ea']
+
             fade = 'fade' in compound and compound['fade']
-            ec = '#808080' if fade else 'k'
-            ez = 4 if fade else 5
+            edge_c_cb = '#808080' if fade or fade_cb else 'k'
+            edge_c_vb = '#808080' if fade else 'k'
+            edge_z = 4 if fade else 5
+
+            vc = vb_cmap if 'vb_gradient' not in compound else \
+                compound['vb_gradient']
+            cc = cb_cmap if 'cb_gradient' not in compound else \
+                compound['cb_gradient']
 
             gbar(ax, x, ip, bottom=emin, bar_width=bar_width, show_edge=True,
-                 gradient=vb_cmap, edge_colour=ec, edge_zorder=ez)
+                 gradient=vc, edge_colour=edge_c_vb, edge_zorder=edge_z)
             gbar(ax, x, ea, bar_width=bar_width, show_edge=True,
-                 gradient=cb_cmap, edge_colour=ec, edge_zorder=ez)
+                 gradient=cc, edge_colour=edge_c_cb, edge_zorder=edge_z)
+
             if show_ea:
                 dashed_arrow(ax, x + bar_width/6., ea - pad/3, 0,
                              -ea + 2 * pad/3, colour='k', line_width=_linewidth)
@@ -71,6 +79,8 @@ class BandAlignmentPlotter(object):
 
             if fade:
                 fadebar(ax, x, emin, bottom=0)
+            elif fade_cb:
+                fadebar(ax, x, ea, bottom=0, zorder=1)
 
         ax.set_ylim((emin, 0))
         ax.set_xlim((0, len(self.data) * bar_width))

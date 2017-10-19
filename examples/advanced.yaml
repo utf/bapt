@@ -2,8 +2,7 @@ compounds:
     - name: 'ZnO'
       ea: 4.4
       ip: 7.7
-      fade: True
-      gradient: 0
+      gradient: 1, 0
     - name: 'MOF-5'
       ea: 2.7
       ip: 7.3
@@ -15,12 +14,20 @@ compounds:
     - name: 'ZIF-8'
       ea: 1.9
       ip: 6.4
-      gradient: 0
+      gradient: 0, 1
     - name: 'COF-1M'
       ea: 1.3
       ip: 4.7
-      color: 'red'
+      gradient: 1, 0
 
-#gradients:
-#    - id: 0
-#      start: 
+gradients:
+    - id: 0
+      start: '#FFFFFF'
+      end: '#000000'
+    - id: 1
+      start: '#FFFFFF'
+      end: '#FFC116'
+
+settings:
+    name_colour: 'k'
+    fade_cb: True

@@ -15,12 +15,6 @@ __email__ = "alexganose@googlemail.com"
 __date__ = "Oct 19, 2017"
 
 
-def bap(band_edge_data, output='alignment.pdf', show_ea=False, dpi=400):
-    baper = BandAlignmentPlotter(band_edge_data)
-    plt = baper.get_plot(show_ea=show_ea)
-    plt.savefig(output, dpi=400)
-
-
 def main():
     parser = argparse.ArgumentParser(description="""
     Plotter for electronic band alignment diagrams.""",
@@ -58,11 +52,17 @@ def main():
         os.exit()
 
     if args.filename:
-        data = read_config(args.filename)
+        data, settings = read_config(args.filename)
     else:
         data = [{'name': name, 'ip': ip, 'ea': ea} for name, ip, ea in
                 zip(args.name, args.ip, args.ea)]
-    bap(data, output=args.output, show_ea=args.show_ea, dpi=args.dpi)
+
+    settings.update({'show_ea': args.show_ea})
+
+    baper = BandAlignmentPlotter(data)
+    plt = baper.get_plot(**settings)
+    plt.savefig(args.output, dpi=400)
+
 
 if __name__ == "__main__":
     main()
