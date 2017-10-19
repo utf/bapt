@@ -55,7 +55,9 @@ def main():
         data, settings = read_config(args.filename)
     else:
         data = [{'name': name, 'ip': ip, 'ea': ea} for name, ip, ea in
-                zip(args.name, args.ip, args.ea)]
+                zip(args.name.split(','), map(float, args.ip.split(',')),
+                    map(float, args.ea.split(',')))]
+        settings = {}
 
     settings.update({'show_ea': args.show_ea})
 

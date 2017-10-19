@@ -115,8 +115,8 @@ def read_config(filename):
         config = yaml.load(f)
 
 
-    settings = config['settings']
-    gradient_data = config['gradients']
+    settings = config['settings'] if 'settings' in config else {}
+    gradient_data = config['gradients'] if 'gradients' in config else []
     gradients = {}
     for d in gradient_data:
         g = LinearSegmentedColormap.from_list(d['id'], [d['start'], d['end']],

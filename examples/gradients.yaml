@@ -31,3 +31,4 @@ gradients:
 settings:
     name_colour: 'k'
     fade_cb: True
+    show_ea: True
