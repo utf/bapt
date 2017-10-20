@@ -52,9 +52,13 @@ Installation
 ------------
 
 Bapt is available on PyPI making installation easy:
+
     pip install --user bapt
+    
 Or:
+
     pip3 install --user bapt
+    
 To install the python 3 version.
 
 
