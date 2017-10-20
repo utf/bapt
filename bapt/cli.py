@@ -2,7 +2,7 @@
 # Copyright (c) Alex Ganose
 # Distributed under the terms of the MIT License.
 
-import os
+import sys
 import argparse
 
 from bapt import read_config, get_plot
@@ -65,7 +65,7 @@ def main():
 
     if emsg:
         print(emsg)
-        os.exit()
+        sys.exit()
 
     output_file = args.output
 

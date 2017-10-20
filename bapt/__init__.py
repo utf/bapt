@@ -73,6 +73,8 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
 
     if show_axis:
         ax.yaxis.set_major_locator(MaxNLocator(5))
+        for spine in ax.spines.values():
+            spine.set_zorder(5)
     else:
         for spine in ax.spines.values():
             spine.set_visible(False)
@@ -84,10 +86,7 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
 
 
 def read_config(filename):
-    try:
-        import ruamel.yaml as yaml
-    except ImportError:
-        import yaml
+    import yaml
 
     with open(filename, 'r') as f:
         config = yaml.load(f)
@@ -103,7 +102,7 @@ def read_config(filename):
     band_edge_data = config['compounds']
     for compound in band_edge_data:
         if 'gradient' in compound:
-            ids = map(int, compound['gradient'].split(','))
+            ids = list(map(int, compound['gradient'].split(',')))
             compound.pop('gradient', None)
             if len(ids) == 1:
                 compound['vb_gradient'] = gradients[ids[0]]

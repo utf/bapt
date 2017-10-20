@@ -11,11 +11,11 @@ vb_colours = [(23/255., 71/255., 158/255.), (174/255., 198/255., 242/255.)]
 cb_cmap = LinearSegmentedColormap.from_list('cb', cb_colours, N=200)
 vb_cmap = LinearSegmentedColormap.from_list('vb', vb_colours, N=200)
 
-default_fonts = ['Whitney Book Extended', 'Arial', 'Whitney Book', 'Helvetica',
+default_fonts = ['Whitney Book Extended', 'Helvetica', 'Arial', 'Whitney Book'
                  'Liberation Sans', 'Andale Sans']
-_ticklabelsize = 18
+_ticklabelsize = 15
 _labelsize = 18
-_ticksize = 6
+_ticksize = 5
 _linewidth = 1.
 
 
@@ -47,8 +47,8 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
 
     ax.tick_params(width=_linewidth, size=_ticksize)
     ax.tick_params(which='major', size=_ticksize, width=_linewidth,
-                   labelsize=_ticklabelsize, pad=10, direction='in',
-                   top='off', bottom='off')
+                   labelsize=_ticklabelsize, pad=4, direction='in',
+                   top='off', bottom='off', right='on', left='on')
     ax.tick_params(which='minor', size=_ticksize/2, width=_linewidth,
                    direction='in', top='off', bottom='off')
 
