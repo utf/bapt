@@ -51,9 +51,11 @@ setuptools and Pip.
 Installation
 ------------
 
-First clone the this repository, then, from the directory containing this README::
-
-    pip3 install --user .
+Bapt is available on PyPI making installation easy:
+    pip install --user bapt
+Or:
+    pip3 install --user bapt
+To install the python 3 version.
 
 
 License
