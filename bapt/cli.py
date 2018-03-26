@@ -42,11 +42,13 @@ def main():
                         help='Set figure width in inches.')
     parser.add_argument('--emin', type=float, default=None,
                         help='Set energy minium on y axis.')
+    parser.add_argument('--gap', type=float, default=0,
+                        help='Set gap between bars.')
     parser.add_argument('--bar-width', type=float, dest='bar_width', default=3,
                         help='Set the width per bar for each compound.')
+    parser.add_argument('--font', default=None, help='Font to use.')
     parser.add_argument('--font-size', type=float, dest='label_size',
-                        default=15,
-                        help='Set the width per bar for each compound.')
+                        default=15, help='Set font size all labels.')
     parser.add_argument('--name-colour', dest='name_colour', default='w',
                         help='Set the colour for the compound name.')
     parser.add_argument('--fade-cb', action='store_true', dest='fade_cb',
@@ -84,7 +86,7 @@ def main():
     properties.update(settings)
 
     plt = get_plot(data, **properties)
-    plt.savefig(output_file, dpi=400)
+    plt.savefig(output_file, dpi=400, bbox_inches='tight')
 
 
 if __name__ == "__main__":

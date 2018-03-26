@@ -10,18 +10,18 @@ from matplotlib.colors import LinearSegmentedColormap
 
 
 def get_plot(data, height=5, width=None, emin=None, colours=None,
-             bar_width=3, show_axis=False, label_size=15, plt=None,
-             fonts=None, show_ea=False, name_colour='w', fade_cb=False):
+             bar_width=3, show_axis=False, label_size=15, plt=None, gap=0.5,
+             font=None, show_ea=False, name_colour='w', fade_cb=False):
 
-    width = bar_width/2. * len(data) if not width else width
+    width = (bar_width/2. + gap/2.) * len(data) if not width else width
     emin = emin if emin else -max([d['ip'] for d in data]) - 2
 
-    plt = pretty_plot(width=width, height=height, plt=plt, fonts=fonts)
+    plt = pretty_plot(width=width, height=height, plt=plt, fonts=[font])
     ax = plt.gca()
 
     pad = 2. / emin
     for i, compound in enumerate(data):
-        x = i * bar_width
+        x = i * (bar_width + gap)
         ip = -compound['ip']
         ea = -compound['ea']
 
@@ -68,10 +68,11 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
             fadebar(ax, x, ea, bottom=0, zorder=1)
 
     ax.set_ylim((emin, 0))
-    ax.set_xlim((0, len(data) * bar_width))
+    ax.set_xlim((0, (len(data) * bar_width) + ((len(data) - 1) * gap)))
     ax.set_xticks([])
 
     if show_axis:
+        ax.set_ylabel("Energy (eV)", size=label_size)
         ax.yaxis.set_major_locator(MaxNLocator(5))
         for spine in ax.spines.values():
             spine.set_zorder(5)
@@ -80,8 +81,8 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
             spine.set_visible(False)
         ax.yaxis.set_visible(False)
 
-    ax.set_title('Vacuum Level', size=18)
-    ax.set_xlabel('Valence Band', size=18)
+    ax.set_title('Vacuum Level', size=label_size)
+    ax.set_xlabel('Valence Band', size=label_size)
     return plt
 
 
