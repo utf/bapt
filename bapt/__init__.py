@@ -63,9 +63,9 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
                 ha='center', va='top', size=label_size, color=name_colour)
 
         if fade:
-            fadebar(ax, x, emin, bottom=0)
+            fadebar(ax, x, emin, bar_width=bar_width, bottom=0)
         elif fade_cb:
-            fadebar(ax, x, ea, bottom=0, zorder=1)
+            fadebar(ax, x, ea, bar_width=bar_width, bottom=0, zorder=1)
 
     ax.set_ylim((emin, 0))
     ax.set_xlim((0, (len(data) * bar_width) + ((len(data) - 1) * gap)))
