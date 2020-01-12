@@ -2,7 +2,7 @@
 # Copyright (c) Alex Ganose
 # Distributed under the terms of the MIT License.
 
-from plotting import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow,
+from bapt.plotting import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow,
                       _linewidth, fadebar)
 
 from matplotlib.ticker import MaxNLocator, MultipleLocator
