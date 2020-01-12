@@ -21,6 +21,8 @@ _linewidth = 1.
 
 def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     """Initialise a matplotlib plot with sensible defaults for publication.
+
+
     Args:
         width (float): Width of plot in inches. Defaults to 8 in.
         height (float): Height of plot in inches. Defaults to 8 in.
@@ -29,6 +31,7 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
         dpi (int): Sets dot per inch for figure. Defaults to 400.
         fonts (list): A list of preferred fonts. If these are not found the
             default fonts will be used.
+
     Returns:
         Matplotlib plot object with properly sized fonts.
     """
