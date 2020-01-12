@@ -34,6 +34,14 @@ file, allows for additional effects:
 
 <img src="https://raw.githubusercontent.com/utf/bapt/master/examples/gradients.png" height="350">
 
+In the alternative case of the relative alignment of bands, without vacuum alignment, 
+one can specify the band gap values `--eg` alongside the valence band offsets `--vbo`, 
+or equivalently the conduction band offsets `--cbo`:
+
+    !python cli.py -n Cs$_2$AgBiBr$_6$,Cs$_2$AgSbBr$_6$,Cs$_2$AgSbCl$_6$ -eg 1.774,1.366,1.6 -cbo 0.247,-0.4 --font-size 10
+
+<img src="https://raw.githubusercontent.com/utf/bapt/master/examples/cli_novac.png" height="350">
+
 
 Requirements
 ------------
