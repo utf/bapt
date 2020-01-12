@@ -38,7 +38,7 @@ In the alternative case of the relative alignment of bands, without vacuum align
 one can specify the band gap values `--eg` alongside the valence band offsets `--vbo`, 
 or equivalently the conduction band offsets `--cbo`:
 
-    bapt -n Cs$_2$AgBiBr$_6$,Cs$_2$AgSbBr$_6$,Cs$_2$AgSbCl$_6$ -eg 1.774,1.366,1.6 -cbo 0.247,-0.4 --font-size 10
+    bapt -n Cs\$_2\$AgBiBr\$_6\$,Cs\$_2\$AgSbBr\$_6\$,Cs\$_2\$AgSbCl\$_6\$ -eg 1.774,1.366,1.6 -cbo 0.247,-0.4 --font-size 10
 
 <img src="https://raw.githubusercontent.com/kavanase/bapt/master/examples/cli_novac.png" height="300">
 
