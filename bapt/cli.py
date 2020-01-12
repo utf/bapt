@@ -5,7 +5,7 @@
 import sys
 import argparse
 
-from __init__ import read_config, get_plot, get_plot_novac
+from bapt import read_config, get_plot, get_plot_novac
 
 __author__ = "Alex Ganose"
 __version__ = "0.1"
