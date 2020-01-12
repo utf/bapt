@@ -5,7 +5,7 @@
 import sys
 import argparse
 
-from bapt import read_config, get_plot
+from __init__ import read_config, get_plot, get_plot_novac
 
 __author__ = "Alex Ganose"
 __version__ = "0.1"
@@ -24,16 +24,29 @@ def main():
     parser.add_argument('-f', '--filename', default=None,
                         help='Path to file containing alignment information.')
     parser.add_argument('-n', '--name',
-                        help='List of compound names (comma seperated).' +
-                        'Must be used in conguction with --ip and --ea.')
+                        help='List of compound names (comma seperated). ' +
+                        'Must be used in conguction with --ip and --ea. ' +
+                        'Use $_x$ and $^y$ for subscript and superscript.')
     parser.add_argument('-i', '--ip',
                         help='List of ionisation potentials (comma separated).')
     parser.add_argument('-e', '--ea',
                         help='List of electron affinities (comma separated).')
+    parser.add_argument('-cbo', '--cbo', default=None,
+                        help='List of conduction band offsets (comma separated). ' +
+                        '(Relative to first compound)(-> No vacuum alignment)')
+    parser.add_argument('-vbo', '--vbo', default=None,
+                        help='List of valence band offsets (comma separated). ' +
+                        '(Relative to first compound)(-> No vacuum alignment)')
+    parser.add_argument('-eg', '--eg',
+                        help='List of band gaps (comma separated).')
     parser.add_argument('-o', '--output', default='alignment.pdf',
                         help='Output file name (defaults to alignment.pdf).')
     parser.add_argument('--show-ea', action='store_true', dest='show_ea',
                         help='Display the electron affinity value.')
+    parser.add_argument('--hide-cbo', action='store_true', dest='hide_cbo',
+                        help='Hide the conduction band offsets.')
+    parser.add_argument('--hide-vbo', action='store_true', dest='hide_vbo',
+                        help='Hide the valence band offsets.')
     parser.add_argument('--show-axis', action='store_true', dest='show_axis',
                         help='Display the energy yaxis bar and label.')
     parser.add_argument('--height', type=float, default=5,
@@ -58,12 +71,18 @@ def main():
     args = parser.parse_args()
 
     emsg = None
-    if not args.filename and not (args.name or args.ip or args.ea):
+    if not args.filename and not (args.name or args.ip or args.ea or args.eg or args.cbo or args.vbo):
         emsg = "ERROR: no arguments specified."
-    elif not args.filename and not (args.name and args.ip and args.ea):
+    elif not args.filename and not (args.ip or args.ea) and \
+            not (args.name and args.eg and (args.cbo or args.vbo)):
+        emsg = "ERROR: --name, --eg and --cbo or --vbo flags must specified concurrently."
+    elif not args.filename and not (args.cbo or args.vbo or args.eg) and \
+            not (args.name and args.ip and args.ea):
         emsg = "ERROR: --name, --ip and --ea flags must specified concurrently."
-    elif args.filename and (args.name or args.ip or args.ea):
-        emsg = "ERROR: filename and name/ip/ea specified simulatenously."
+    elif not args.filename and (args.cbo and args.vbo):
+        emsg = "ERROR: cbo and vbo specified simultaneously."
+    elif args.filename and (args.name or args.ip or args.ea or args.eg or args.cbo or args.vbo):
+        emsg = "ERROR: filename and name/ip/ea/cbo/vbo specified simultaneously."
 
     if emsg:
         print(emsg)
@@ -73,19 +92,42 @@ def main():
 
     if args.filename:
         data, settings = read_config(args.filename)
+        for item in data:
+            if 'cbo' in item:
+                item['vbo'] = data[0]['eg'] - item['eg'] + item['cbo']
+            if 'vbo' in item:
+                item['cbo'] = -data[0]['eg'] + item['eg'] + item['vbo']
+
     else:
-        data = [{'name': name, 'ip': ip, 'ea': ea} for name, ip, ea in
-                zip(args.name.split(','), map(float, args.ip.split(',')),
-                    map(float, args.ea.split(',')))]
+        for k, v in {'cbo': args.cbo, 'vbo': args.vbo}.items():
+            if v:
+                data = [{'name': name, 'eg': eg, k: c_or_v_bo} for name, eg, c_or_v_bo in
+                        zip(args.name.split(','), map(float, args.eg.split(',')),
+                            [0] + list(map(float, v.split(','))))]
+                for item in data:
+                    if k is 'cbo':
+                        item['vbo'] = data[0]['eg'] - item['eg'] + item['cbo']
+                    if k is 'vbo':
+                        item['cbo'] = -data[0]['eg'] + item['eg'] + item['vbo']
+        if args.ip:
+            data = [{'name': name, 'ip': ip, 'ea': ea} for name, ip, ea in
+                    zip(args.name.split(','), map(float, args.ip.split(',')),
+                        map(float, args.ea.split(',')))]
+
         settings = {}
 
     properties = vars(args)
-    remove_keys = ('filename', 'ip', 'ea', 'name', 'output', 'dpi')
+    remove_keys = ('filename', 'ip', 'ea', 'eg', 'cbo',
+                   'vbo', 'name', 'output', 'dpi')
     for key in remove_keys:
         properties.pop(key, None)
     properties.update(settings)
 
-    plt = get_plot(data, **properties)
+    if 'vbo' in data[0]:  # no vacuum alignment
+        plt = get_plot_novac(data, **properties)
+    else:
+        [properties.pop(key, None) for key in ['hide_cbo', 'hide_vbo']]
+        plt = get_plot(data, **properties)
     plt.savefig(output_file, dpi=400, bbox_inches='tight')
 
 
