@@ -46,11 +46,11 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     ax = plt.gca()
 
     ax.tick_params(width=_linewidth, size=_ticksize)
-    ax.tick_params(which='major', size=_ticksize, width=_linewidth,
+    ax.tick_params(which='major', size=_ticksize, width=1.75*_linewidth,
                    labelsize=_ticklabelsize, pad=4, direction='in',
                    top='off', bottom='off', right='on', left='on')
     ax.tick_params(which='minor', size=_ticksize/2, width=_linewidth,
-                   direction='in', top='off', bottom='off')
+                   direction='in', top='off', bottom='off', right='on')
 
     ax.set_title(ax.get_title(), size=20)
     for axis in ['top', 'bottom', 'left', 'right']:
