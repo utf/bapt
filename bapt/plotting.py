@@ -21,8 +21,6 @@ _linewidth = 1.
 
 def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     """Initialise a matplotlib plot with sensible defaults for publication.
-
-
     Args:
         width (float): Width of plot in inches. Defaults to 8 in.
         height (float): Height of plot in inches. Defaults to 8 in.
@@ -31,7 +29,6 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
         dpi (int): Sets dot per inch for figure. Defaults to 400.
         fonts (list): A list of preferred fonts. If these are not found the
             default fonts will be used.
-
     Returns:
         Matplotlib plot object with properly sized fonts.
     """
@@ -46,11 +43,11 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     ax = plt.gca()
 
     ax.tick_params(width=_linewidth, size=_ticksize)
-    ax.tick_params(which='major', size=_ticksize, width=1.75*_linewidth,
+    ax.tick_params(which='major', size=_ticksize, width=_linewidth,
                    labelsize=_ticklabelsize, pad=4, direction='in',
                    top='off', bottom='off', right='on', left='on')
     ax.tick_params(which='minor', size=_ticksize/2, width=_linewidth,
-                   direction='in', top='off', bottom='off', right='on')
+                   direction='in', top='off', bottom='off')
 
     ax.set_title(ax.get_title(), size=20)
     for axis in ['top', 'bottom', 'left', 'right']:
