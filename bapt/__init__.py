@@ -2,8 +2,8 @@
 # Copyright (c) Alex Ganose
 # Distributed under the terms of the MIT License.
 
-from bapt.plotting import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow,
-                           _linewidth, fadebar)
+from plotting import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow,
+                      _linewidth, fadebar)
 
 from matplotlib.ticker import MaxNLocator, MultipleLocator
 from matplotlib.colors import LinearSegmentedColormap
@@ -122,7 +122,7 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=Non
 
     width = (bar_width/2. + gap/2.) * len(data) if not width else width
     emin = emin if emin else min([d['vbo'] for d in data]) - 1
-    emax = emax if emax else max([d['vbo'] + d['eg'] for d in data]) + 1
+    emax = emax if emax else max([d['vbo'] + d['band_gap'] for d in data]) + 1
 
     plt = pretty_plot(width=width, height=height, plt=plt, fonts=[font])
     ax = plt.gca()
@@ -131,7 +131,7 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=Non
     for i, compound in enumerate(data):
         x = i * (bar_width + gap)
         ip = compound['vbo']
-        ea = compound['vbo'] + compound['eg']
+        ea = compound['vbo'] + compound['band_gap']
 
         fade = 'fade' in compound and compound['fade']
         edge_c_cb = '#808080' if fade or fade_cb else 'k'
@@ -150,8 +150,8 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=Non
 
         dashed_arrow(ax, x + bar_width/6., ip - pad/3, 0,
                      ea-ip + 2 * pad/3, colour='k', line_width=_linewidth)
-        ax.text(x + bar_width/4., ip + pad/2 + compound['eg']/2,
-                '{:.2f} eV'.format(compound['eg']), ha='left',
+        ax.text(x + bar_width/4., ip + pad/2 + compound['band_gap']/2,
+                '{:.2f} eV'.format(compound['band_gap']), ha='left',
                 va='bottom', size=label_size, color='k', zorder=2)
 
         ax.text(x + bar_width/2., ip + pad/2, compound['name'], zorder=2,
