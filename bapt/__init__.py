@@ -160,13 +160,11 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=Non
             if not hide_vbo:
                 ax.text(x + bar_width/2., ip + 1.65*pad,
                         f"VBO: {compound['vbo'] - data[i-1]['vbo']:+.2f} eV", zorder=2,
-                        ha='center', va='top', size=label_size-3, color=name_colour,
-                        fontfamily='serif')
+                        ha='center', va='top', size=label_size-3, color=name_colour)
             if not hide_cbo:
                 ax.text(x + bar_width/2., ea - pad,
                         f"CBO: {compound['cbo'] - data[i-1]['cbo']:+.2f} eV", zorder=2,
-                        ha='center', va='top', size=label_size-3, color=name_colour,
-                        fontfamily='serif')
+                        ha='center', va='top', size=label_size-3, color=name_colour)
 
         if fade:
             fadebar(ax, x, emin, bar_width=bar_width, bottom=emax)
