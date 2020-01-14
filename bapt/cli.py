@@ -5,7 +5,7 @@
 import sys
 import argparse
 
-from bapt import read_config, get_plot, get_plot_novac
+from __init__ import read_config, get_plot, get_plot_novac
 
 __author__ = "Alex Ganose"
 __version__ = "0.1"
@@ -31,13 +31,13 @@ def main():
                         help='List of ionisation potentials (comma separated).')
     parser.add_argument('-e', '--ea',
                         help='List of electron affinities (comma separated).')
-    parser.add_argument('-cbo', '--cbo', default=None,
+    parser.add_argument('-c', '--cbo', default=None,
                         help='List of conduction band offsets (comma separated). ' +
                         '(Relative to first compound)(-> No vacuum alignment)')
-    parser.add_argument('-vbo', '--vbo', default=None,
+    parser.add_argument('-v', '--vbo', default=None,
                         help='List of valence band offsets (comma separated). ' +
                         '(Relative to first compound)(-> No vacuum alignment)')
-    parser.add_argument('-eg', '--eg',
+    parser.add_argument('-b', '--band-gap', dest='band_gap',
                         help='List of band gaps (comma separated).')
     parser.add_argument('-o', '--output', default='alignment.pdf',
                         help='Output file name (defaults to alignment.pdf).')
@@ -71,17 +71,17 @@ def main():
     args = parser.parse_args()
 
     emsg = None
-    if not args.filename and not (args.name or args.ip or args.ea or args.eg or args.cbo or args.vbo):
+    if not args.filename and not (args.name or args.ip or args.ea or args.band_gap or args.cbo or args.vbo):
         emsg = "ERROR: no arguments specified."
     elif not args.filename and not (args.ip or args.ea) and \
-            not (args.name and args.eg and (args.cbo or args.vbo)):
-        emsg = "ERROR: --name, --eg and --cbo or --vbo flags must specified concurrently."
-    elif not args.filename and not (args.cbo or args.vbo or args.eg) and \
+            not (args.name and args.band_gap and (args.cbo or args.vbo)):
+        emsg = "ERROR: --name, --band-gap and --cbo or --vbo flags must specified concurrently."
+    elif not args.filename and not (args.cbo or args.vbo or args.band_gap) and \
             not (args.name and args.ip and args.ea):
         emsg = "ERROR: --name, --ip and --ea flags must specified concurrently."
     elif not args.filename and (args.cbo and args.vbo):
         emsg = "ERROR: cbo and vbo specified simultaneously."
-    elif args.filename and (args.name or args.ip or args.ea or args.eg or args.cbo or args.vbo):
+    elif args.filename and (args.name or args.ip or args.ea or args.band_gap or args.cbo or args.vbo):
         emsg = "ERROR: filename and name/ip/ea/cbo/vbo specified simultaneously."
 
     if emsg:
@@ -94,21 +94,21 @@ def main():
         data, settings = read_config(args.filename)
         for item in data:
             if 'cbo' in item:
-                item['vbo'] = data[0]['eg'] - item['eg'] + item['cbo']
+                item['vbo'] = data[0]['band_gap'] - item['band_gap'] + item['cbo']
             if 'vbo' in item:
-                item['cbo'] = -data[0]['eg'] + item['eg'] + item['vbo']
+                item['cbo'] = -data[0]['band_gap'] + item['band_gap'] + item['vbo']
 
     else:
         for k, v in {'cbo': args.cbo, 'vbo': args.vbo}.items():
             if v:
-                data = [{'name': name, 'eg': eg, k: c_or_v_bo} for name, eg, c_or_v_bo in
-                        zip(args.name.split(','), map(float, args.eg.split(',')),
+                data = [{'name': name, 'band_gap': band_gap, k: c_or_v_bo} for name, band_gap, c_or_v_bo in
+                        zip(args.name.split(','), map(float, args.band_gap.split(',')),
                             [0] + list(map(float, v.split(','))))]
                 for item in data:
                     if k is 'cbo':
-                        item['vbo'] = data[0]['eg'] - item['eg'] + item['cbo']
+                        item['vbo'] = data[0]['band_gap'] - item['band_gap'] + item['cbo']
                     if k is 'vbo':
-                        item['cbo'] = -data[0]['eg'] + item['eg'] + item['vbo']
+                        item['cbo'] = -data[0]['band_gap'] + item['band_gap'] + item['vbo']
         if args.ip:
             data = [{'name': name, 'ip': ip, 'ea': ea} for name, ip, ea in
                     zip(args.name.split(','), map(float, args.ip.split(',')),
@@ -117,7 +117,7 @@ def main():
         settings = {}
 
     properties = vars(args)
-    remove_keys = ('filename', 'ip', 'ea', 'eg', 'cbo',
+    remove_keys = ('filename', 'ip', 'ea', 'band_gap', 'cbo',
                    'vbo', 'name', 'output', 'dpi')
     for key in remove_keys:
         properties.pop(key, None)
