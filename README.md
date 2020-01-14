@@ -40,7 +40,14 @@ or equivalently the conduction band offsets `--cbo`:
 
     bapt -n Cs\$_2\$AgBiBr\$_6\$,Cs\$_2\$AgSbBr\$_6\$,Cs\$_2\$AgSbCl\$_6\$ -eg 1.774,1.366,1.6 -cbo 0.247,-0.4 --font-size 10
 
-<img src="https://raw.githubusercontent.com/kavanase/bapt/master/examples/cli_novac.png" height="300">
+<img src="https://raw.githubusercontent.com/utf/bapt/master/examples/cli_novac.png" height="300">
+
+Again, a more advanced plot, generated using the `examples/band_offset.yaml`config 
+file, demonstrates additional plot effects:
+
+    bapt --filename examples/band_offset.yaml
+
+<img src="https://raw.githubusercontent.com/utf/bapt/master/examples/band_offset.png" height="300">
 
 
 Requirements
@@ -68,6 +75,16 @@ Or:
     pip3 install --user bapt
     
 To install the python 3 version.
+
+
+Contributors
+------------
+
+`bapt` was developed by Alex Ganose.
+
+Other contributions are provided by:
+
+* Seán Kavanagh through the research groups of David Scanlon at University College London and Aron Walsh at Imperial College London.
 
 
 License
