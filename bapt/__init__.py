@@ -180,7 +180,7 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=Non
         ax.yaxis.set_major_locator(MultipleLocator(1))
         for spine in ax.spines.values():
             spine.set_zorder(5)
-        ax.tick_params(which='major', width=1.75*_linewidth) # prettify
+        ax.tick_params(which='major', width=_linewidth) # prettify
         ax.tick_params(which='minor', right='on')
         ax.yaxis.set_minor_locator(MultipleLocator(0.5))
     else:
