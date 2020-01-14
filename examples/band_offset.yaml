@@ -25,3 +25,7 @@ settings:
     fade_cb: True
     show_ea: True
     show_axis: True
+    height: 4
+    width: 4
+    label_size: 10
+    bar_width: 2.5
