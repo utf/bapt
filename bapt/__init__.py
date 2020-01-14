@@ -2,8 +2,8 @@
 # Copyright (c) Alex Ganose
 # Distributed under the terms of the MIT License.
 
-from plotting import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow,
-                      _linewidth, fadebar)
+from .plotting import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow,
+                       _linewidth, fadebar)
 
 from matplotlib.ticker import MaxNLocator, MultipleLocator
 from matplotlib.colors import LinearSegmentedColormap
@@ -115,19 +115,19 @@ def read_config(filename):
     return band_edge_data, settings
 
 
-def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=None,
-                   bar_width=3, show_axis=False, hide_cbo=False, hide_vbo=False,
-                   label_size=15, plt=None, gap=0.5, font=None, show_ea=False,
-                   name_colour='w', fade_cb=False):
+def get_plot_novac(data, height=5, width=None, emin=None, emax=None,
+                   colours=None, bar_width=3, show_axis=False, hide_cbo=False,
+                   hide_vbo=False, label_size=15, plt=None, gap=0.5, font=None,
+                   show_ea=False, name_colour='w', fade_cb=False):
 
     width = (bar_width/2. + gap/2.) * len(data) if not width else width
-    emin = emin if emin else min([d['vbo'] for d in data]) - 1
-    emax = emax if emax else max([d['vbo'] + d['band_gap'] for d in data]) + 1
+    emin = emin if emin else min([d['vbo'] for d in data]) - 2
+    emax = emax if emax else max([d['vbo'] + d['band_gap'] for d in data]) + 2
 
     plt = pretty_plot(width=width, height=height, plt=plt, fonts=[font])
     ax = plt.gca()
 
-    pad = -0.4
+    pad = - (emax - emin) / 20
     for i, compound in enumerate(data):
         x = i * (bar_width + gap)
         ip = compound['vbo']
@@ -150,21 +150,30 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=Non
 
         dashed_arrow(ax, x + bar_width/6., ip - pad/3, 0,
                      ea-ip + 2 * pad/3, colour='k', line_width=_linewidth)
-        ax.text(x + bar_width/4., ip + pad/2 + compound['band_gap']/2,
+        ax.text(x + bar_width/4., ip + compound['band_gap']/2,
                 '{:.2f} eV'.format(compound['band_gap']), ha='left',
-                va='bottom', size=label_size, color='k', zorder=2)
+                va='center', size=label_size, color='k', zorder=2)
 
-        ax.text(x + bar_width/2., ip + pad/2, compound['name'], zorder=2,
-                ha='center', va='top', size=label_size, color=name_colour)
+        t = ax.text(x + bar_width/2., ip + pad / 2, compound['name'], zorder=2,
+                    ha='center', va='top', size=label_size, color=name_colour)
+
+        # use renderer to get position of compound label text
+        renderer = plt.gcf().canvas.get_renderer()
+        bb = t.get_window_extent(renderer=renderer)
+        inv = ax.transData.inverted()
+        y1 = inv.transform([bb.y0, bb.y1 + 2 * bb.height])[1]
         if i > 0:
             if not hide_vbo:
-                ax.text(x + bar_width/2., ip + 1.65*pad,
-                        f"VBO: {compound['vbo'] - data[i-1]['vbo']:+.2f} eV", zorder=2,
-                        ha='center', va='top', size=label_size-3, color=name_colour)
+                vbo = compound['vbo'] - data[i-1]['vbo']
+                ax.text(x + bar_width/2., y1,
+                        "{:+.2f} eV".format(vbo), zorder=2, ha='center',
+                        va='top', size=label_size, color=name_colour)
+
             if not hide_cbo:
-                ax.text(x + bar_width/2., ea - pad,
-                        f"CBO: {compound['cbo'] - data[i-1]['cbo']:+.2f} eV", zorder=2,
-                        ha='center', va='top', size=label_size-3, color=name_colour)
+                cbo = compound['cbo'] - data[i-1]['cbo']
+                ax.text(x + bar_width/2., ea - pad / 4,
+                        "{:+.2f} eV".format(cbo), zorder=2, ha='center',
+                        va='bottom', size=label_size, color=name_colour)
 
         if fade:
             fadebar(ax, x, emin, bar_width=bar_width, bottom=emax)
@@ -180,7 +189,7 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None, colours=Non
         ax.yaxis.set_major_locator(MultipleLocator(1))
         for spine in ax.spines.values():
             spine.set_zorder(5)
-        ax.tick_params(which='major', width=_linewidth) # prettify
+        ax.tick_params(which='major', width=_linewidth)
         ax.tick_params(which='minor', right='on')
         ax.yaxis.set_minor_locator(MultipleLocator(0.5))
     else:

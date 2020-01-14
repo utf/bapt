@@ -34,6 +34,6 @@ Get yourself some nice band alignment diagrams
         ],
     keywords='chemistry dft band alignment ionisation potential electron',
     packages=find_packages(),
-    install_requires=['matplotlib'],
+    install_requires=['matplotlib', 'PyYAML>=5.1'],
     entry_points={'console_scripts': ['bapt = bapt.cli:main']}
 )

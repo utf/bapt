@@ -1,0 +1,10 @@
+compounds:
+    - name: ZnO
+      band_gap: 1.774
+      cbo: 0
+    - name: MOF-5
+      band_gap: 1.366
+      cbo: 0.247
+    - name: COF-1M
+      band_gap: 1.6
+      cbo: -0.4

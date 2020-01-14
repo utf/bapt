@@ -34,26 +34,22 @@ file, allows for additional effects:
 
 <img src="https://raw.githubusercontent.com/utf/bapt/master/examples/gradients.png" height="350">
 
-In the alternative case of the relative alignment of bands, without vacuum alignment, 
-one can specify the band gap values `--band-gap` alongside the valence band offsets `--vbo`, 
+In the alternative case of the relative alignment of bands, without vacuum alignment,
+one can specify the band gap values `--band-gap` alongside the valence band offsets `--vbo`,
 or equivalently the conduction band offsets `--cbo`:
 
-    bapt -n Cs\$_2\$AgBiBr\$_6\$,Cs\$_2\$AgSbBr\$_6\$,Cs\$_2\$AgSbCl\$_6\$ --band-gap 1.774,1.366,1.6 -cbo 0.247,-0.4 --font-size 10
+    bapt -n ZnO,MOF-5,COF-1M --band-gap 1.774,1.366,1.6 --cbo 0.247,-0.4
 
-<img src="https://raw.githubusercontent.com/utf/bapt/master/examples/cli_novac.png" height="300">
+<img src="https://raw.githubusercontent.com/utf/bapt/master/examples/offset.png" height="300">
 
-Again, a more advanced plot, generated using the `examples/band_offset.yaml`config 
-file, demonstrates additional plot effects:
-
-    bapt --filename examples/band_offset.yaml
-
-<img src="https://raw.githubusercontent.com/utf/bapt/master/examples/band_offset.png" height="300">
+The band offset approach can also be controlled through a yaml config file. For an example,
+see `examples/offset.yml`.
 
 
 Requirements
 ------------
 
-Bapt is currently compatible with Python 2.7 and Python 3.4. Matplotlib is required 
+Bapt is currently compatible with Python 2.7 and Python 3.4. Matplotlib is required
 for plotting and PyYAML is needed for config files.
 
 Bapt uses Pip and setuptools for installation. You *probably* already
@@ -69,11 +65,11 @@ Installation
 Bapt is available on PyPI making installation easy:
 
     pip install --user bapt
-    
+
 Or:
 
     pip3 install --user bapt
-    
+
 To install the python 3 version.
 
 
