@@ -62,6 +62,15 @@ Or:
 To install the python 3 version.
 
 
+Contributors
+------------
+
+`bapt` was developed by Alex Ganose.
+
+Other contributions are provided by:
+
+* Seán Kavanagh through the research group of David Scanlon at University College London.
+
 License
 -------
 
