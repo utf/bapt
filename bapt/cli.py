@@ -68,6 +68,10 @@ def main():
                         help='Apply a fade to the conduction band segments.')
     parser.add_argument('--dpi', default=400,
                         help='Dots-per-inch for file output.')
+    parser.add_argument('--no-gradient', action='store_false', dest='gradients',
+                        help='Plot the boxes as solid colours.')
+    parser.add_argument('--photocat', action='store_true',
+                        dest='photocat_hlines', help='Plot water redox potentials')       
     args = parser.parse_args()
 
     emsg = None
@@ -105,9 +109,9 @@ def main():
                         zip(args.name.split(','), map(float, args.band_gap.split(',')),
                             [0] + list(map(float, v.split(','))))]
                 for item in data:
-                    if k is 'cbo':
+                    if k == 'cbo':
                         item['vbo'] = data[0]['band_gap'] - item['band_gap'] + item['cbo']
-                    if k is 'vbo':
+                    if k == 'vbo':
                         item['cbo'] = -data[0]['band_gap'] + item['band_gap'] + item['vbo']
         if args.ip:
             data = [{'name': name, 'ip': ip, 'ea': ea} for name, ip, ea in
@@ -124,6 +128,7 @@ def main():
     properties.update(settings)
 
     if 'vbo' in data[0]:  # no vacuum alignment
+        properties.pop('photocat_hlines')
         plt = get_plot_novac(data, **properties)
     else:
         [properties.pop(key, None) for key in ['hide_cbo', 'hide_vbo']]
