@@ -10,7 +10,7 @@ from matplotlib.colors import LinearSegmentedColormap
 
 def get_plot(data, height=5, width=None, emin=None, colours=None,
              bar_width=3, show_axis=False, label_size=15, plt=None, gap=0.5,
-             font=None, show_ea=False, name_colour='w', fade_cb=False, gradients=True, photocat_hlines=False):
+             font=None, show_ea=False, name_colour='w', fade_cb=False, gradients=True, photocat=False):
 
     width = (bar_width/2. + gap/2.) * len(data) if not width else width
     emin = emin if emin else -max([d['ip'] for d in data]) - 2
@@ -81,7 +81,7 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
     ax.set_ylim((emin, 0))
     ax.set_xlim((0, (len(data) * bar_width) + ((len(data) - 1) * gap)))
 
-    if photocat_hlines: 
+    if photocat: 
         end = (len(data) * bar_width) + ((len(data) - 1) * gap)
         ax.hlines([-4.44, -5.67], 0, end, colors=['#808080', '#808080'], zorder=0, linewidths=1, linestyles='dotted', label=['H3O$^+$/H2', 'H$_2$O/O$_2$'])
         plt.text(end+0.1, -4.44, '[H$^+$/H$_2$]', va='center', size=label_size)

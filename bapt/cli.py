@@ -71,7 +71,7 @@ def main():
     parser.add_argument('--no-gradient', action='store_false', dest='gradients',
                         help='Plot the boxes as solid colours.')
     parser.add_argument('--photocat', action='store_true',
-                        dest='photocat_hlines', help='Plot water redox potentials')       
+                         help='Plot water redox potentials')       
     args = parser.parse_args()
 
     emsg = None
