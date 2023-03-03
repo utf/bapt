@@ -2,8 +2,7 @@
 # Copyright (c) Alex Ganose
 # Distributed under the terms of the MIT License.
 
-from .plotting import (pretty_plot, gbar, vb_cmap, cb_cmap, dashed_arrow,
-                       _linewidth, fadebar)
+from .plotting import (pretty_plot, gbar, cbar, vb_cmap, cb_cmap, dashed_arrow, _linewidth, fadebar)
 
 from matplotlib.ticker import MaxNLocator, MultipleLocator
 from matplotlib.colors import LinearSegmentedColormap
@@ -11,7 +10,7 @@ from matplotlib.colors import LinearSegmentedColormap
 
 def get_plot(data, height=5, width=None, emin=None, colours=None,
              bar_width=3, show_axis=False, label_size=15, plt=None, gap=0.5,
-             font=None, show_ea=False, name_colour='w', fade_cb=False):
+             font=None, show_ea=False, name_colour='w', fade_cb=False, gradients=True, photocat=False):
 
     width = (bar_width/2. + gap/2.) * len(data) if not width else width
     emin = emin if emin else -max([d['ip'] for d in data]) - 2
@@ -30,16 +29,28 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
         edge_c_vb = '#808080' if fade else 'k'
         edge_z = 4 if fade else 5
 
-        vc = vb_cmap if 'vb_gradient' not in compound else \
-            compound['vb_gradient']
-        cc = cb_cmap if 'cb_gradient' not in compound else \
-            compound['cb_gradient']
+        if gradients:
+            vg = vb_cmap if 'vb_gradient' not in compound else \
+                compound['vb_gradient']
+            cg = cb_cmap if 'cb_gradient' not in compound else \
+                compound['cb_gradient']
 
-        gbar(ax, x, ip, bottom=emin, bar_width=bar_width, show_edge=True,
-             gradient=vc, edge_colour=edge_c_vb, edge_zorder=edge_z)
-        gbar(ax, x, ea, bar_width=bar_width, show_edge=True,
-             gradient=cc, edge_colour=edge_c_cb, edge_zorder=edge_z)
+            gbar(ax, x, ip, bottom=emin, bar_width=bar_width, show_edge=True,
+                gradient=vg, edge_colour=edge_c_vb, edge_zorder=edge_z)
+            gbar(ax, x, ea, bar_width=bar_width, show_edge=True,
+                gradient=cg, edge_colour=edge_c_cb, edge_zorder=edge_z)
 
+        else: 
+            vc = '#219ebc' if 'vb_colour' not in compound else \
+                compound['vb_colour']
+            cc ='#fb8500' if 'cb_colour' not in compound else \
+                compound['cb_colour']
+
+            cbar(ax, x, ip, vc, bottom=emin, bar_width=bar_width, show_edge=True, 
+                edge_colour=edge_c_vb, edge_zorder=edge_z)
+            cbar(ax, x, ea, cc, bar_width=bar_width, show_edge=True, 
+                edge_colour=edge_c_vb, edge_zorder=edge_z)
+            
         if show_ea:
             dashed_arrow(ax, x + bar_width/6., ea - pad/3, 0,
                          -ea + 2 * pad/3, colour='k', line_width=_linewidth)
@@ -66,9 +77,16 @@ def get_plot(data, height=5, width=None, emin=None, colours=None,
             fadebar(ax, x, emin, bar_width=bar_width, bottom=0)
         elif fade_cb:
             fadebar(ax, x, ea, bar_width=bar_width, bottom=0, zorder=1)
-
+    
     ax.set_ylim((emin, 0))
     ax.set_xlim((0, (len(data) * bar_width) + ((len(data) - 1) * gap)))
+
+    if photocat: 
+        end = (len(data) * bar_width) + ((len(data) - 1) * gap)
+        ax.hlines([-4.44, -5.67], 0, end, colors=['#808080', '#808080'], zorder=0, linewidths=1, linestyles='dotted', label=['H3O$^+$/H2', 'H$_2$O/O$_2$'])
+        plt.text(end+0.1, -4.44, '[H$^+$/H$_2$]', va='center', size=label_size)
+        plt.text(end+0.1, -5.67, '[H$_2$O/O$_2$]', va='center', size=label_size)
+
     ax.set_xticks([])
 
     if show_axis:
@@ -118,7 +136,7 @@ def read_config(filename):
 def get_plot_novac(data, height=5, width=None, emin=None, emax=None,
                    colours=None, bar_width=3, show_axis=False, hide_cbo=False,
                    hide_vbo=False, label_size=15, plt=None, gap=0.5, font=None,
-                   show_ea=False, name_colour='w', fade_cb=False):
+                   show_ea=False, name_colour='w', fade_cb=False, gradients=True):
 
     width = (bar_width/2. + gap/2.) * len(data) if not width else width
     emin = emin if emin else min([d['vbo'] for d in data]) - 2
@@ -137,16 +155,27 @@ def get_plot_novac(data, height=5, width=None, emin=None, emax=None,
         edge_c_cb = '#808080' if fade or fade_cb else 'k'
         edge_c_vb = '#808080' if fade else 'k'
         edge_z = 4 if fade else 5
+        
+        if gradients: 
+            vc = vb_cmap if 'vb_gradient' not in compound else \
+                compound['vb_gradient']
+            cc = cb_cmap if 'cb_gradient' not in compound else \
+                compound['cb_gradient']
 
-        vc = vb_cmap if 'vb_gradient' not in compound else \
-            compound['vb_gradient']
-        cc = cb_cmap if 'cb_gradient' not in compound else \
-            compound['cb_gradient']
+            gbar(ax, x, ip, bottom=emin, bar_width=bar_width, show_edge=True,
+                gradient=vc, edge_colour=edge_c_vb, edge_zorder=edge_z)
+            gbar(ax, x, ea, bottom=emax, bar_width=bar_width, show_edge=True,
+                gradient=cc, edge_colour=edge_c_cb, edge_zorder=edge_z)
+        else: 
+            vc = '#219ebc' if 'vb_colour' not in compound else \
+                compound['vb_colour']
+            cc ='#fb8500' if 'cb_colour' not in compound else \
+                compound['cb_colour']
 
-        gbar(ax, x, ip, bottom=emin, bar_width=bar_width, show_edge=True,
-             gradient=vc, edge_colour=edge_c_vb, edge_zorder=edge_z)
-        gbar(ax, x, ea, bottom=emax, bar_width=bar_width, show_edge=True,
-             gradient=cc, edge_colour=edge_c_cb, edge_zorder=edge_z)
+            cbar(ax, x, ip, vc, bottom=emin, bar_width=bar_width, show_edge=True,       
+                edge_colour=edge_c_vb, edge_zorder=edge_z)
+            cbar(ax, x, ea, cc, bottom=emax, bar_width=bar_width, show_edge=True, 
+                edge_colour=edge_c_vb, edge_zorder=edge_z)
 
         dashed_arrow(ax, x + bar_width/6., ip - pad/3, 0,
                      ea-ip + 2 * pad/3, colour='k', line_width=_linewidth)

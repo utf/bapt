@@ -11,7 +11,7 @@ vb_colours = [(23/255., 71/255., 158/255.), (174/255., 198/255., 242/255.)]
 cb_cmap = LinearSegmentedColormap.from_list('cb', cb_colours, N=200)
 vb_cmap = LinearSegmentedColormap.from_list('vb', vb_colours, N=200)
 
-default_fonts = ['Whitney Book Extended', 'Helvetica', 'Arial', 'Whitney Book'
+default_fonts = ['Whitney Pro', 'Helvetica', 'Arial', 'Whitney Book'
                  'Liberation Sans', 'Andale Sans']
 _ticklabelsize = 15
 _labelsize = 18
@@ -68,6 +68,21 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     rc('legend', handlelength=2)
     return plt
 
+
+def cbar(ax, left, top, face_colour, bar_width=3, bottom=0,
+         show_edge=True, edge_colour='k', edge_zorder=5):
+    X = [[.6, .6], [.7, .7]]
+    right = left + bar_width
+    patch = Rectangle((left, top), bar_width, bottom-top, fill=True,
+                           clip_on=False, facecolor=face_colour,
+                          )
+    ax.add_patch(patch)
+
+    if show_edge:
+        border = Rectangle((left, top), bar_width, bottom-top, fill=False,
+                           lw=_linewidth, edgecolor=edge_colour, clip_on=False,
+                           zorder=edge_zorder)
+        ax.add_patch(border)
 
 def gbar(ax, left, top, bar_width=3, bottom=0, gradient=vb_cmap,
          show_edge=True, edge_colour='k', edge_zorder=5):
