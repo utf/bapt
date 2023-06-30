@@ -108,8 +108,7 @@ def read_config(filename):
     import yaml
 
     with open(filename, 'r') as f:
-        # stop showing yaml warning
-        config = yaml.load(f, Loader=yaml.FullLoader)
+        config = yaml.safe_load(f)
 
     settings = config['settings'] if 'settings' in config else {}
     gradient_data = config['gradients'] if 'gradients' in config else []
