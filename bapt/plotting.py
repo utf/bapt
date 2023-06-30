@@ -59,7 +59,7 @@ def pretty_plot(width=5, height=5, plt=None, dpi=400, fonts=None):
     ax.set_xlabel(ax.get_xlabel(), size=_labelsize)
     ax.set_ylabel(ax.get_ylabel(), size=_labelsize)
 
-    fonts = default_fonts if fonts is None else fonts + default_fonts
+    fonts = default_fonts if fonts is None or fonts == [None] else fonts + default_fonts
 
     rc('font', **{'family': 'sans-serif', 'sans-serif': fonts})
     rc('text', usetex=False)
