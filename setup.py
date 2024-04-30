@@ -9,7 +9,7 @@ project_dir = abspath(dirname(__file__))
 
 setup(
     name='bapt',
-    version='1.0.0',
+    version='1.1.0',
     description='Band alignment plotting tool',
     long_description="""
 Get yourself some nice band alignment diagrams
