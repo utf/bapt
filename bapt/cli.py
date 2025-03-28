@@ -128,7 +128,7 @@ def main():
     properties.update(settings)
 
     if 'vbo' in data[0]:  # no vacuum alignment
-        properties.pop('photocat_hlines')
+        [properties.pop(key, None) for key in ['photocat_hlines', 'photocat']]
         plt = get_plot_novac(data, **properties)
     else:
         [properties.pop(key, None) for key in ['hide_cbo', 'hide_vbo']]
